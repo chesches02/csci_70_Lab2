@@ -1,0 +1,15 @@
+PLUS  	+
+NUM   	1
+MINUS 	-
+NUM   	2
+PLUS  	+
+NUM   	1
+MINUS 	-
+NUM   	2
+PLUS  	+
+NUM   	334
+MINUS 	-
+NUM   	32
+PLUS  	+
+NUM   	23443
+ERROR 	Lexical Error reading character "_"
