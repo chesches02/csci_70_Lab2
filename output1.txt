@@ -1,0 +1,11 @@
+NUM   	23345
+PLUS  	+
+NUM   	12
+MINUS 	-
+NUM   	23
+MINUS 	-
+NUM   	1
+MINUS 	-
+NUM   	234
+ASSIGN	==
+NUM   	22222

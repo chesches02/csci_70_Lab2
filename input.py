@@ -53,21 +53,22 @@ def tokenize(input_string):
     
     return tokens
 
-def main():git 
-    input_file_path = 'input.txt'
-    output_file_path = 'output.txt'
-    
-    # Read the input file
-    with open(input_file_path, 'r') as file:
-        input_string = file.read().strip()
-    
-    # Tokenize the input string
-    tokens = tokenize(input_string)
-    
-    # Write tokens to the output file
-    with open(output_file_path, 'w') as file:
-        for token in tokens:
-            file.write(token + '\n')
+def main():
+    input_file_path = 'input2.txt'
+    output_file_path = 'output2.txt'
+
+    for i in range(1,4):
+        # Read the input file
+        with open(input_file_path, 'r') as file:
+            input_string = file.read().strip()
+
+        # Tokenize the input string
+        tokens = tokenize(input_string)
+
+        # Write tokens to the output file
+        with open(output_file_path, 'w') as file:
+            for token in tokens:
+                file.write(token + '\n')
 
 if __name__ == '__main__':
     main()
