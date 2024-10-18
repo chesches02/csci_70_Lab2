@@ -243,27 +243,35 @@ def main():
 
     while i < lenProg: # the main loop
         currentChar = input_string[i]
+        pushback = 0
         nextState = None
 
+        print(f"State: {currentState}   input: {currentChar}")
+
+        
+        #calculate the next state
         for pattern in states[currentState]:
             # if pattern matches the string
             if re.search(pattern, currentChar):
                 nextState = states[currentState][pattern]
         
-                # evaluating the nextState
-                # tokens
-                print(nextState)
-                if (nextState == 'start'):
-                    print(f"{currentState}")
-                    stringCollection.append(tempBuiltString + " " + nextState)
-                    i += states[currentState]['pushback']
-                elif (nextState == 'ERROR'):
-                    print(states[currentState]['description'])
-                else:
-                    tempBuiltString += currentChar
+        # evaluating the currentState
+        # tokens
+        if (nextState == 'start'): # if the nextState leads back to the start, check for the name because it's probably a token now
+            print(tempBuiltString)
+            stringCollection.append((tempBuiltString,currentState))
+            tempBuiltString = ""
+            pushback = states[currentState]['pushback']
+        elif (nextState == 'ERROR'):
+            print(states[currentState]['description'])
+        else:
+            tempBuiltString += currentChar
 
         currentState = nextState
         i+=1 # end of loop, just to start again
+        i+=pushback # see if it moves or nah
+    
+    print(stringCollection)
 
 
 if __name__ == '__main__':
