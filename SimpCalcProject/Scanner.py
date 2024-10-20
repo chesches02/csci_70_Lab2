@@ -1,7 +1,14 @@
 import re #for determining the different symbol groups
 
+def printResults(ans):
+    with open('SimpCalcProject/scanner_out.txt', 'w') as file:
+        for i in ans:
+            if (i[1] != 15):
+                file.write("{:<12}{:<12}\n".format(i[1],i[0]))
+
 LETTER_PATTERN = "[A-z]"
 DIGIT_PATTERN = "[0-9]"
+ANY_OR_NEWLINE = '.| |\n'
 
 states = {
     'start' : {
@@ -21,8 +28,8 @@ states = {
         '[)]' : "RIGHTPAREN",
         '[(]' : "LEFTPAREN",
         '[=]' : "EQUAL",
-        '[+]' : "PLUS"
-        #maybe I'll put the end_of_file symbol later, or not depends. I just put this here to say that it will depend later
+        '[+]' : "PLUS",
+        '[ \n]' : 'start' # fsr wala pala spacebar and newline
     },
 
     1 : {
@@ -110,102 +117,102 @@ states = {
     # Tokens (not pushback) ====================
 
     "ASSIGN" : {
-        '.' : 'start', # regex for any value
-        'pushback' : 0,
+        ANY_OR_NEWLINE : 'start', # regex for any value
+        'pushback' : -1,
     },
     "RAISE" : {
-        '.' : 'start', # regex for any value
-        'pushback' : 0,
+        ANY_OR_NEWLINE : 'start', # regex for any value
+        'pushback' : -1,
     },
     "LT_EQUAL" : {
-        '.' : 'start', # regex for any value
-        'pushback' : 0,
+        ANY_OR_NEWLINE : 'start', # regex for any value
+        'pushback' : -1,
     },
     "GT_EQUAL" : {
-        '.' : 'start', # regex for any value
-        'pushback' : 0,
+        ANY_OR_NEWLINE : 'start', # regex for any value
+        'pushback' : -1,
     },
     "NOT_EQUAL" : {
-        '.' : 'start', # regex for any value
-        'pushback' : 0,
+        ANY_OR_NEWLINE : 'start', # regex for any value
+        'pushback' : -1,
     },
     "SEMICOLON" : {
-        '.' : 'start', # regex for any value
-        'pushback' : 0,
+        ANY_OR_NEWLINE : 'start', # regex for any value
+        'pushback' : -1,
     },
     "COMMA" : {
-        '.' : 'start', # regex for any value
-        'pushback' : 0,
+        ANY_OR_NEWLINE : 'start', # regex for any value
+        'pushback' : -1,
     },
     "MINUS" : {
-        '.' : 'start', # regex for any value
-        'pushback' : 0,
+        ANY_OR_NEWLINE : 'start', # regex for any value
+        'pushback' : -1,
     },
     "END_OF_FILE" : {
-        '.' : 'start', # regex for any value
-        'pushback' : 0,
+        ANY_OR_NEWLINE : 'start', # regex for any value
+        'pushback' : -1,
     },
     "RIGHTPAREN" : {
-        '.' : 'start', # regex for any value
-        'pushback' : 0,
+        ANY_OR_NEWLINE : 'start', # regex for any value
+        'pushback' : -1,
     },
     "LEFTPAREN" : {
-        '.' : 'start', # regex for any value
-        'pushback' : 0,
+        ANY_OR_NEWLINE : 'start', # regex for any value
+        'pushback' : -1,
     },
     "EQUAL" : {
-        '.' : 'start', # regex for any value
-        'pushback' : 0,
+        ANY_OR_NEWLINE : 'start', # regex for any value
+        'pushback' : -1,
     },
     "PLUS" : {
-        '.' : 'start', # regex for any value
-        'pushback' : 0,
+        ANY_OR_NEWLINE : 'start', # regex for any value
+        'pushback' : -1,
     },
 
     # Tokens (pushback)===================================
 
     "IDENTIFIER" : {
-        '.' : 'start', # regex for any value
-        'pushback' : -1,
+        ANY_OR_NEWLINE : 'start', # regex for any value
+        'pushback' : -2,
     },
 
     "NUM" : {
-        '.' : 'start', # regex for any value
-        'pushback' : -1,
+        ANY_OR_NEWLINE : 'start', # regex for any value
+        'pushback' : -2,
     },
 
     "STRING" : {
-        '.' : 'start', # regex for any value
-        'pushback' : -1,
+        ANY_OR_NEWLINE : 'start', # regex for any value
+        'pushback' : -2,
     },
 
     "COLON" : {
-        '.' : 'start', # regex for any value
-        'pushback' : -1,
+        ANY_OR_NEWLINE : 'start', # regex for any value
+        'pushback' : -2,
     },
 
     "MULTIPLY" : {
-        '.' : 'start', # regex for any value
-        'pushback' : -1,
+        ANY_OR_NEWLINE : 'start', # regex for any value
+        'pushback' : -2,
     },
     
     "LESS_THAN" : {
-        '.' : 'start', # regex for any value
-        'pushback' : -1,
+        ANY_OR_NEWLINE : 'start', # regex for any value
+        'pushback' : -2,
     },
     
     "GREATER_THAN" : {
-        '.' : 'start', # regex for any value
-        'pushback' : -1,
+        ANY_OR_NEWLINE : 'start', # regex for any value
+        'pushback' : -2,
     },
     
     "DIVIDE" : {
-        '.' : 'start', # regex for any value
-        'pushback' : -1,
+        ANY_OR_NEWLINE : 'start', # regex for any value
+        'pushback' : -2,
     },
     
     15 : {
-        '.' : 'start', # regex for any value
+        ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -1,
     },
 
@@ -213,27 +220,28 @@ states = {
 
     "ERROR_1" : {
         'description' :  'Lexical Error : expected closing parenthesis (") here',
-        '.' : "ERROR",
+        ANY_OR_NEWLINE : "ERROR",
     },
 
     "ERROR_2" : {
         'description' :  'Lexical Error: invalid token (!)',
-        '.' : "ERROR",
+        ANY_OR_NEWLINE : "ERROR",
     }, 
 
     "ERROR_3" : {
         'description' :  'Lexical Error: incorrect exponential float format',
-        '.' : "ERROR",
+        ANY_OR_NEWLINE : "ERROR",
     }, 
 
 }
 
 def main():
     input_file_path = 'SimpCalcProject/test_inp.txt'
-    #output_file_path = 'scanner_out.txt'
 
     with open(input_file_path, 'r') as file:
         input_string = file.read().strip()
+    
+    input_string += "?" #this serves as the end of file character
 
     i = 0
     lenProg = len(input_string)
@@ -248,6 +256,8 @@ def main():
 
         print(f"State: {currentState}   input: {currentChar}")
 
+        # check if we're at the last character
+        #if i == (lenProg-1): 
         
         #calculate the next state
         for pattern in states[currentState]:
@@ -257,21 +267,31 @@ def main():
         
         # evaluating the currentState
         # tokens
-        if (nextState == 'start'): # if the nextState leads back to the start, check for the name because it's probably a token now
-            print(tempBuiltString)
-            stringCollection.append((tempBuiltString,currentState))
+        if ('pushback' in states[currentState]): # check if the pushback key is here.
+            if (states[currentState]['pushback'] == -2):
+                print(f"StringBuilt: {tempBuiltString[:len(tempBuiltString)-1]}") # prune the last
+                stringCollection.append((tempBuiltString[:len(tempBuiltString)-1],currentState))
+            elif(states[currentState]['pushback'] == -1):
+                print(f"StringBuilt: {tempBuiltString}") # prune the last
+                stringCollection.append((tempBuiltString,currentState))
             tempBuiltString = ""
             pushback = states[currentState]['pushback']
         elif (nextState == 'ERROR'):
             print(states[currentState]['description'])
+        elif (currentState == 'start' and nextState =='start'): # if you are in start and it's a whitespace, skip it
+            pass
         else:
             tempBuiltString += currentChar
 
         currentState = nextState
-        i+=1 # end of loop, just to start again
-        i+=pushback # see if it moves or nah
+        i+=(1+pushback) # end of loop, just to start again; see if it moves or nah
+    
+    currentState = "END_OF_FILE"
+
+    #stringCollection.append((ENDOFFILE))
     
     print(stringCollection)
+    printResults(stringCollection)
 
 
 if __name__ == '__main__':

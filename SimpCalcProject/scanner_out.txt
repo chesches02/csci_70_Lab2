@@ -1,0 +1,69 @@
+IDENTIFIER  discriminant
+ASSIGN      :=          
+NUM         10          
+RAISE       **          
+NUM         2           
+MINUS       -           
+LEFTPAREN   (           
+NUM         4           
+MULTIPLY    *           
+NUM         5.5         
+MULTIPLY    *           
+LEFTPAREN   (           
+MINUS       -           
+NUM         3           
+RIGHTPAREN  )           
+RIGHTPAREN  )           
+SEMICOLON   ;           
+IDENTIFIER  IF          
+IDENTIFIER  discriminant
+GT_EQUAL    >=          
+NUM         0           
+COLON       :           
+IDENTIFIER  root1       
+ASSIGN      :=          
+LEFTPAREN   (           
+MINUS       -           
+NUM         10          
+PLUS        +           
+IDENTIFIER  SQRT        
+LEFTPAREN   (           
+IDENTIFIER  discriminant
+RIGHTPAREN  )           
+RIGHTPAREN  )           
+DIVIDE      /           
+LEFTPAREN   (           
+NUM         2           
+MULTIPLY    *           
+NUM         5.5         
+RIGHTPAREN  )           
+SEMICOLON   ;           
+IDENTIFIER  root2       
+ASSIGN      :=          
+LEFTPAREN   (           
+MINUS       -           
+NUM         10          
+MINUS       -           
+IDENTIFIER  SQRT        
+LEFTPAREN   (           
+IDENTIFIER  discriminant
+RIGHTPAREN  )           
+RIGHTPAREN  )           
+DIVIDE      /           
+LEFTPAREN   (           
+NUM         2           
+MULTIPLY    *           
+NUM         5.5         
+RIGHTPAREN  )           
+SEMICOLON   ;           
+IDENTIFIER  PRINT       
+LEFTPAREN   (           
+STRING      "roots are  
+STRING      ",root1,root2);
+ELSE // discriminant is negative
+   PRINT(
+STRING      "no real roots
+STRING      ");
+ENDIF;
+PRINT(
+STRING      "end of program
