@@ -3,21 +3,21 @@ import re #for determining the different symbol groups
 def printResults(ans):
     with open('SimpCalcProject/scanner_out.txt', 'w') as file:
         for i in ans:
-            if(i[1] == "IDENTIFIER"):
+            if(i[1] == "Identifier"):
                 if(i[0] == "PRINT"):
-                    file.write("{:<12}{:<12}\n".format("PRINT",i[0]))
+                    file.write("{:<12}{:<12}\n".format("Print",i[0]))
                 elif(i[0] == "IF"):
-                    file.write("{:<12}{:<12}\n".format("IF",i[0]))
+                    file.write("{:<12}{:<12}\n".format("If",i[0]))
                 elif(i[0] == "ELSE"):
-                    file.write("{:<12}{:<12}\n".format("ELSE",i[0]))
+                    file.write("{:<12}{:<12}\n".format("Else",i[0]))
                 elif(i[0] == "ENDIF"):
-                    file.write("{:<12}{:<12}\n".format("ENDIF",i[0]))
+                    file.write("{:<12}{:<12}\n".format("Endif",i[0]))
                 elif(i[0] == "AND"):
-                    file.write("{:<12}{:<12}\n".format("AND",i[0]))
+                    file.write("{:<12}{:<12}\n".format("And",i[0]))
                 elif(i[0] == "OR"):
-                    file.write("{:<12}{:<12}\n".format("OR",i[0]))
+                    file.write("{:<12}{:<12}\n".format("Or",i[0]))
                 elif(i[0] == "NOT"):
-                    file.write("{:<12}{:<12}\n".format("NOT",i[0]))
+                    file.write("{:<12}{:<12}\n".format("Not",i[0]))
                 else:
                     file.write("{:<12}{:<12}\n".format(i[1],i[0]))
             elif (i[1] != 15):
@@ -39,13 +39,13 @@ states = {
         '[>]' : 8,
         '[!]' : 9,
         '[/]' : 10,
-        '[;]' : "SEMICOLON",
-        '[,]' : "COMMA",
-        '[-]' : "MINUS",
-        '[)]' : "RIGHTPAREN",
-        '[(]' : "LEFTPAREN",
-        '[=]' : "EQUAL",
-        '[+]' : "PLUS",
+        '[;]' : "Semicolon",
+        '[,]' : "Comma",
+        '[-]' : "Minus",
+        '[)]' : "RightParen",
+        '[(]' : "LeftParen",
+        '[=]' : "Equal",
+        '[+]' : "Plus",
         '[ \n]' : 'start', # fsr wala pala spacebar and newline
         '[.?&@$%]' : 'ERROR_4', # not within the allowed symbols
     },
@@ -54,56 +54,56 @@ states = {
         LETTER_PATTERN : 1,
         DIGIT_PATTERN : 1,
         '[_]' : 1,
-        '[^A-Za-z_0-9]' : "IDENTIFIER", # the key is just ReGex for:  NOT a letter (uppercase or lowercase) or a number.
+        '[^A-Za-z_0-9]' : "Identifier", # the key is just ReGex for:  NOT a letter (uppercase or lowercase) or a number.
     },
 
     2 : {
         DIGIT_PATTERN : 2,
         '[.]' : 4,
         '[eE]' :12,
-        '[^,.eE0-9]' : "NUM", # the key is ReGex for NOT a dot, comma, e or E
+        '[^,.eE0-9]' : "Number", # the key is ReGex for NOT a dot, comma, e or E
     },
 
     3 : {
         '[\n]' : "ERROR_1", #error for an unclosed quotation
         '[^\"\n]' : 3, # ReGex for NOT a quotation mark or a newline
-        '\"' : "STRING",  
+        '\"' : "String",  
     },
 
     4 : {
         DIGIT_PATTERN : 4,
         '[eE]' : 12,
-        '[^0-9eE]' : "NUM", # NOT DIGIT
+        '[^0-9eE]' : "Number", # NOT DIGIT
     },
 
     5 : {
-        '[=]' : "ASSIGN",
-        '[^=]' : "COLON", 
+        '[=]' : "Assign",
+        '[^=]' : "Colon", 
     },
 
     6 : {
-        '[*]' : "RAISE",
-        '[^*]' : "MULTIPLY",
+        '[*]' : "Raise",
+        '[^*]' : "Multiply",
     },
 
     7 : {
-        '[=]' : "LT_EQUAL",
-        '[^=]' : "LESS_THAN", # NOT =
+        '[=]' : "LTEqual",
+        '[^=]' : "LessThan", # NOT =
     },
 
     8 : {
-        '[=]' : "GT_EQUAL",
-        '[^=]' : "GREATER_THAN", # NOT =
+        '[=]' : "GTEqual",
+        '[^=]' : "GreaterThan", # NOT =
     },
 
     9 : {
-        '[=]' : "NOT_EQUAL",
+        '[=]' : "NotEqual",
         '[^=]' : "ERROR_2", # NOT =, error invalid token for !
     },
 
     10 : {
         '[/]' : 11,
-        '[^/]' : "DIVIDE"
+        '[^/]' : "Divide"
     },
 
     11 : {
@@ -120,12 +120,12 @@ states = {
     13 : {
         DIGIT_PATTERN : 13,
         '.' : 14,
-        '[^0-9.]' : "NUM", # NOT DIGIT
+        '[^0-9.]' : "Number", # NOT DIGIT
     },
 
     14 : {
         DIGIT_PATTERN : 14,
-        '[^0-9]' : "NUM", # NOT DIGIT
+        '[^0-9]' : "Number", # NOT DIGIT
     },
 
     16 : {
@@ -135,35 +135,35 @@ states = {
 
     # Tokens (not pushback) ====================
 
-    "ASSIGN" : {
+    "Assign" : {
         ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -1,
     },
-    "RAISE" : {
+    "Raise" : {
         ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -1,
     },
-    "LT_EQUAL" : {
+    "LTEqual" : {
         ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -1,
     },
-    "GT_EQUAL" : {
+    "GTEqual" : {
         ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -1,
     },
-    "NOT_EQUAL" : {
+    "NotEqual" : {
         ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -1,
     },
-    "SEMICOLON" : {
+    "Semicolon" : {
         ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -1,
     },
-    "COMMA" : {
+    "Comma" : {
         ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -1,
     },
-    "MINUS" : {
+    "Minus" : {
         ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -1,
     },
@@ -171,60 +171,60 @@ states = {
         ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -1,
     },
-    "RIGHTPAREN" : {
+    "RightParen" : {
         ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -1,
     },
-    "LEFTPAREN" : {
+    "LeftParen" : {
         ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -1,
     },
-    "EQUAL" : {
+    "Equal" : {
         ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -1,
     },
-    "PLUS" : {
+    "Plus" : {
         ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -1,
     },
-    "STRING" : {
+    "String" : {
         ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -1,
     },
 
     # Tokens (pushback)===================================
 
-    "IDENTIFIER" : {
+    "Identifier" : {
         ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -2,
     },
 
-    "NUM" : {
+    "Number" : {
         ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -2,
     },
 
-    "COLON" : {
+    "Colon" : {
         ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -2,
     },
 
-    "MULTIPLY" : {
+    "Multiply" : {
         ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -2,
     },
     
-    "LESS_THAN" : {
+    "LessThan" : {
         ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -2,
     },
     
-    "GREATER_THAN" : {
+    "GreaterThan" : {
         ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -2,
     },
     
-    "DIVIDE" : {
+    "Divide" : {
         ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -2,
     },
@@ -309,7 +309,7 @@ def main():
                     stringCollection.append((tempBuiltString[:len(tempBuiltString)],currentState))
                 else:
                     print(states[currentState]['description'])
-                    stringCollection.append((states[currentState]['description'],"ERROR"))
+                    stringCollection.append((states[currentState]['description'],"Error"))
                 
             tempBuiltString = ""
             pushback = states[currentState]['pushback']
