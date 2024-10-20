@@ -114,7 +114,7 @@ states = {
     12 : {
         '[+-]' : 16,
         DIGIT_PATTERN : 13,
-        '[^0-9+-]' : "NUM", # NOT DIGIT
+        '[^0-9+-]' : "ERROR_3", # NOT DIGIT or NOT whitespace
     },
 
     13 : {
@@ -249,7 +249,7 @@ states = {
     }, 
 
     "ERROR_3" : {
-        'description' :  'Lexical Error: incorrect exponential float format',
+        'description' :  'Lexical Error: incorrect number format',
         ANY_OR_NEWLINE : "skipLine",
         'pushback' : -1,
     }, 
