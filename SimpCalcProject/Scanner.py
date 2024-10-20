@@ -3,7 +3,24 @@ import re #for determining the different symbol groups
 def printResults(ans):
     with open('SimpCalcProject/scanner_out.txt', 'w') as file:
         for i in ans:
-            if (i[1] != 15):
+            if(i[1] == "IDENTIFIER"):
+                if(i[0] == "PRINT"):
+                    file.write("{:<12}{:<12}\n".format("PRINT",i[0]))
+                elif(i[0] == "IF"):
+                    file.write("{:<12}{:<12}\n".format("IF",i[0]))
+                elif(i[0] == "ELSE"):
+                    file.write("{:<12}{:<12}\n".format("ELSE",i[0]))
+                elif(i[0] == "ENDIF"):
+                    file.write("{:<12}{:<12}\n".format("ENDIF",i[0]))
+                elif(i[0] == "AND"):
+                    file.write("{:<12}{:<12}\n".format("AND",i[0]))
+                elif(i[0] == "OR"):
+                    file.write("{:<12}{:<12}\n".format("OR",i[0]))
+                elif(i[0] == "NOT"):
+                    file.write("{:<12}{:<12}\n".format("NOT",i[0]))
+                else:
+                    file.write("{:<12}{:<12}\n".format(i[1],i[0]))
+            elif (i[1] != 15):
                 file.write("{:<12}{:<12}\n".format(i[1],i[0]))
 
 LETTER_PATTERN = "[A-z]"
@@ -29,7 +46,8 @@ states = {
         '[(]' : "LEFTPAREN",
         '[=]' : "EQUAL",
         '[+]' : "PLUS",
-        '[ \n]' : 'start' # fsr wala pala spacebar and newline
+        '[ \n]' : 'start', # fsr wala pala spacebar and newline
+        '[.?&@$%]' : 'ERROR_4', # not within the allowed symbols
     },
 
     1 : {
@@ -42,19 +60,20 @@ states = {
     2 : {
         DIGIT_PATTERN : 2,
         '[.]' : 4,
+        '[eE]' :12,
         '[^,.eE0-9]' : "NUM", # the key is ReGex for NOT a dot, comma, e or E
     },
 
     3 : {
         '[\n]' : "ERROR_1", #error for an unclosed quotation
-        '[^"]' : 3, # ReGex for NOT a quotation mark
-        '"' : "STRING",  
+        '[^\"\n]' : 3, # ReGex for NOT a quotation mark or a newline
+        '\"' : "STRING",  
     },
 
     4 : {
         DIGIT_PATTERN : 4,
         '[eE]' : 12,
-        '[^0-9]' : "NUM", # NOT DIGIT
+        '[^0-9eE]' : "NUM", # NOT DIGIT
     },
 
     5 : {
@@ -95,7 +114,7 @@ states = {
     12 : {
         '[+-]' : 16,
         DIGIT_PATTERN : 13,
-        '[^0-9]' : "NUM", # NOT DIGIT
+        '[^0-9+-]' : "NUM", # NOT DIGIT
     },
 
     13 : {
@@ -168,6 +187,10 @@ states = {
         ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -1,
     },
+    "STRING" : {
+        ANY_OR_NEWLINE : 'start', # regex for any value
+        'pushback' : -1,
+    },
 
     # Tokens (pushback)===================================
 
@@ -177,11 +200,6 @@ states = {
     },
 
     "NUM" : {
-        ANY_OR_NEWLINE : 'start', # regex for any value
-        'pushback' : -2,
-    },
-
-    "STRING" : {
         ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -2,
     },
@@ -220,18 +238,32 @@ states = {
 
     "ERROR_1" : {
         'description' :  'Lexical Error : expected closing parenthesis (") here',
-        ANY_OR_NEWLINE : "ERROR",
+        ANY_OR_NEWLINE : "skipLine",
+        'pushback' : -1,
     },
 
     "ERROR_2" : {
         'description' :  'Lexical Error: invalid token (!)',
-        ANY_OR_NEWLINE : "ERROR",
+        ANY_OR_NEWLINE : "skipLine",
+        'pushback' : -1,
     }, 
 
     "ERROR_3" : {
         'description' :  'Lexical Error: incorrect exponential float format',
-        ANY_OR_NEWLINE : "ERROR",
+        ANY_OR_NEWLINE : "skipLine",
+        'pushback' : -1,
     }, 
+
+    "ERROR_4" : {
+        'description' :  'Lexical Error: illegal character sequence',
+        ANY_OR_NEWLINE : "skipLine",
+        'pushback' : -1,
+    }, 
+
+    "skipLine" : { # not that the line is invalid, just repeat until the next line
+        '[^\n]' : "skipLine",
+        '[\n]' : 'start'
+    }
 
 }
 
@@ -272,12 +304,17 @@ def main():
                 print(f"StringBuilt: {tempBuiltString[:len(tempBuiltString)-1]}") # prune the last
                 stringCollection.append((tempBuiltString[:len(tempBuiltString)-1],currentState))
             elif(states[currentState]['pushback'] == -1):
-                print(f"StringBuilt: {tempBuiltString}") # prune the last
-                stringCollection.append((tempBuiltString,currentState))
+                if ("ERROR" not in str(currentState)):
+                    print(f"StringBuilt: {tempBuiltString[:len(tempBuiltString)]}")
+                    stringCollection.append((tempBuiltString[:len(tempBuiltString)],currentState))
+                else:
+                    print(states[currentState]['description'])
+                    stringCollection.append((states[currentState]['description'],"ERROR"))
+                
             tempBuiltString = ""
             pushback = states[currentState]['pushback']
-        elif (nextState == 'ERROR'):
-            print(states[currentState]['description'])
+        elif (currentState == "skipLine"):
+            tempBuiltString = ""
         elif (currentState == 'start' and nextState =='start'): # if you are in start and it's a whitespace, skip it
             pass
         else:
@@ -285,7 +322,18 @@ def main():
 
         currentState = nextState
         i+=(1+pushback) # end of loop, just to start again; see if it moves or nah
-    
+
+
+    # if the tempBuiltString still has elements, run it one more iteration. It's for the pushback
+    if len(tempBuiltString) > 0:
+        print(tempBuiltString)
+        print(currentState)
+        # check if it's a pushback state of -2
+        if 'pushback' in states[currentState]:
+            if states[currentState]['pushback'] == -2:
+                stringCollection.append((tempBuiltString[:len(tempBuiltString)-1],currentState))
+        
+
     currentState = "END_OF_FILE"
 
     #stringCollection.append((ENDOFFILE))
