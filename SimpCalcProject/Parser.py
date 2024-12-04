@@ -368,80 +368,10 @@ def process_file(filename):
         print(f"Error processing file: {str(e)}")
 
 if __name__ == "__main__":
-    # Example usage
-    test_input = """If          IF
-Identifier  a
-GreaterThan >
-Identifier  b
-Colon       :
-Print       PRINT
-LeftParen   (
-String      "okay"
-RightParen  )
-Semicolon   ;
-Endif       ENDIF
-Semicolon   ;
-If          IF
-Identifier  a
-GreaterThan >
-Identifier  b
-And         AND
-Identifier  c
-LTEqual     <=
-Identifier  D
-And         AND
-Identifier  E
-NotEqual    !=
-Identifier  F
-Colon       :
-Print       PRINT
-LeftParen   (
-String      "okay"
-RightParen  )
-Semicolon   ;
-Endif       ENDIF
-Semicolon   ;
-If          IF
-Identifier  a
-GreaterThan >
-Identifier  b
-Or          OR
-Identifier  c
-LTEqual     <=
-Identifier  D
-Or          OR
-Identifier  E
-NotEqual    !=
-Identifier  F
-Colon       :
-Print       PRINT
-LeftParen   (
-String      "okay"
-RightParen  )
-Semicolon   ;
-Endif       ENDIF
-Semicolon   ;
-If          IF
-Identifier  a
-GreaterThan >
-Identifier  b
-And         AND
-Identifier  c
-LTEqual     <=
-Identifier  D
-Or          OR
-Identifier  E
-NotEqual    !=
-Identifier  F
-Colon       :
-Print       PRINT
-LeftParen   (
-String      "not okay"
-RightParen  )
-Semicolon   ;
-Endif       ENDIF
-Semicolon   ;
-"""
+    with open('SimpCalcProject/scanner_out.txt', 'r') as file:
+        # Example usage
+        test_input = file.read()
     
-    result = process_scanner_file(test_input)
-    print(result)
+        result = process_scanner_file(test_input, file.name)
+        with open('SimpCalcProject/parser_out.txt', 'w') as outp:
+            outp.write(result)

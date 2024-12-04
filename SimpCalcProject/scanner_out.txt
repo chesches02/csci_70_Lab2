@@ -1,81 +1,94 @@
-Identifier  a_          
-If          IF          
-Else        ELSE        
-Endif       ENDIF       
-Identifier  SQRT        
-Print       PRINT       
-And         AND         
-Or          OR          
-Not         NOT         
-Number      123211231   
-Number      98.3243246  
-Lexical Error: illegal character sequence
-Error
-Number      71          
-Lexical Error: illegal character sequence
-Error
-Lexical Error: incorrect number format
-Error
-Number      111.222e333 
-Lexical Error: illegal character sequence
-Error
-Number      444         
-Number      9.8E+7      
-Plus        +           
-Number      6.5e4       
-Plus        +           
-Number      3e+21       
-Lexical Error: illegal character sequence
-Error
-Number      1e1         
-Lexical Error: illegal character sequence
-Error
-Lexical Error: illegal character sequence
-Error
-Lexical Error: illegal character sequence
-Error
-Number      1           
-Identifier  e           
-Plus        +           
-Identifier  e           
-String      "you are a test sentence"
-Semicolon   ;           
-Identifier  if          
-Identifier  else        
-Identifier  endif       
-Identifier  sqrt        
-Identifier  print       
-Identifier  and         
-Identifier  or          
-Identifier  not         
-Number      5213        
-Identifier  y           
-Colon       :           
-Semicolon   ;           
-Equal       =           
+Identifier  A           
 Assign      :=          
+Identifier  SQRT        
+LeftParen   (           
+Number      1           
+RightParen  )           
 Semicolon   ;           
-Colon       :           
-Identifier  _x_         
-Number      5           
-Plus        +           
-Number      5           
-Plus        +           
-Number      5           
-Identifier  you         
-Identifier  are         
-Identifier  another     
-Identifier  test        
-Identifier  sentence    
-Lexical Error: illegal character sequence
-Error
-Number      1           
-Raise       **          
-Number      3           
-Raise       **          
-Number      1           
-Number      3           
-Minus       -           
+Identifier  B           
+Assign      :=          
+Identifier  SQRT        
+LeftParen   (           
 Number      4           
-Plus        +           
+RightParen  )           
+Semicolon   ;           
+If          IF          
+Identifier  B           
+GreaterThan >           
+Identifier  A           
+Colon       :           
+Print       PRINT       
+LeftParen   (           
+String      "If I could save time in a bottle"
+RightParen  )           
+Semicolon   ;           
+Else        ELSE        
+Print       PRINT       
+LeftParen   (           
+String      "IMPOSSIBLE"
+RightParen  )           
+Semicolon   ;           
+Endif       ENDIF       
+Semicolon   ;           
+If          IF          
+Number      2           
+GreaterThan >           
 Number      1           
+And         AND         
+Number      3           
+GreaterThan >           
+Number      2           
+Colon       :           
+Print       PRINT       
+LeftParen   (           
+String      "the first thing that I'd like to do"
+RightParen  )           
+Semicolon   ;           
+Else        ELSE        
+Print       PRINT       
+LeftParen   (           
+String      "IMPOSSIBLE"
+RightParen  )           
+Semicolon   ;           
+Endif       ENDIF       
+Semicolon   ;           
+If          IF          
+Number      2           
+GreaterThan >           
+Number      1           
+Or          OR          
+Number      1           
+GreaterThan >           
+Number      2           
+Colon       :           
+Print       PRINT       
+LeftParen   (           
+String      "is to save every day until eternity passes away"
+RightParen  )           
+Semicolon   ;           
+Else        ELSE        
+Print       PRINT       
+LeftParen   (           
+String      "IMPOSSIBLE"
+RightParen  )           
+Semicolon   ;           
+Endif       ENDIF       
+Semicolon   ;           
+If          IF          
+Number      2           
+Lexical Error: invalid token (!)
+Error
+Colon       :           
+Print       PRINT       
+LeftParen   (           
+String      "just to spend them with you "
+RightParen  )           
+Semicolon   ;           
+Else        ELSE        
+Print       PRINT       
+LeftParen   (           
+String      "IMPOSSIBLE"
+RightParen  )           
+Semicolon   ;           
+Endif       ENDIF       
+Semicolon   ;           
