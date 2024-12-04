@@ -9,15 +9,32 @@ Or          OR
 Not         NOT         
 Number      123211231   
 Number      98.3243246  
-Error       Lexical Error: illegal character sequence
-Number      73.         
-Error       Lexical Error: incorrect number format
+Lexical Error: illegal character sequence
+Error
+Number      71          
+Lexical Error: illegal character sequence
+Error
+Lexical Error: incorrect number format
+Error
+Number      111.222e333 
+Lexical Error: illegal character sequence
+Error
+Number      444         
 Number      9.8E+7      
 Plus        +           
 Number      6.5e4       
 Plus        +           
 Number      3e+21       
-Error       Lexical Error: illegal character sequence
+Lexical Error: illegal character sequence
+Error
+Number      1e1         
+Lexical Error: illegal character sequence
+Error
+Lexical Error: illegal character sequence
+Error
+Lexical Error: illegal character sequence
+Error
+Number      1           
 Identifier  e           
 Plus        +           
 Identifier  e           
@@ -50,7 +67,8 @@ Identifier  are
 Identifier  another     
 Identifier  test        
 Identifier  sentence    
-Error       Lexical Error: illegal character sequence
+Lexical Error: illegal character sequence
+Error
 Number      1           
 Raise       **          
 Number      3           

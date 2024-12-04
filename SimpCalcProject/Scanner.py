@@ -20,6 +20,13 @@ def printResults(ans):
                     file.write("{:<12}{:<12}\n".format("Not",i[0]))
                 else:
                     file.write("{:<12}{:<12}\n".format(i[1],i[0]))
+            elif(i[1] == 'Error'):
+                file.write(i[0])
+                file.write('\n')
+                file.write(i[1])
+                file.write('\n')
+            elif(i[1] == 'Number' or i[1] == 'Number_2'):
+                file.write("{:<12}{:<12}\n".format("Number",i[0]))
             elif (i[1] != 15):
                 file.write("{:<12}{:<12}\n".format(i[1],i[0]))
 
@@ -59,7 +66,7 @@ states = {
 
     2 : {
         DIGIT_PATTERN : 2,
-        '[.]' : 4,
+        '[.]' : 17,
         '[eE]' :12,
         '[^,.eE0-9]' : "Number", # the key is ReGex for NOT a dot, comma, e or E
     },
@@ -118,19 +125,27 @@ states = {
     },
 
     13 : {
-        DIGIT_PATTERN : 13,
-        '.' : 14,
-        '[^0-9.]' : "Number", # NOT DIGIT
+        r'[0-9]' : 13,
+        '[^0-9]' : "Number", # NOT DIGIT
     },
 
     14 : {
         DIGIT_PATTERN : 14,
-        '[^0-9]' : "Number", # NOT DIGIT
+        '[\n]' : 'ERROR_4',
+        '[^0-9\n]' : "Number", # NOT DIGIT
     },
 
     16 : {
         DIGIT_PATTERN : 13,
         '[^0-9]' : "ERROR_3", # NOT DIGIT, Exponential format error
+    },
+    17 : {
+        DIGIT_PATTERN : 4,
+        '[^0-9]' : "ERROR_4", # NOT DIGIT
+    },
+    18 : {
+        DIGIT_PATTERN : 18,
+        '[^0-9]' : "ERROR_3", # NOT DIGIT
     },
 
     # Tokens (not pushback) ====================
@@ -204,6 +219,11 @@ states = {
         'pushback' : -2,
     },
 
+    "Number_2" : {
+        ANY_OR_NEWLINE : 'start', # regex for any value
+        'pushback' : -3,
+    },
+
     "Colon" : {
         ANY_OR_NEWLINE : 'start', # regex for any value
         'pushback' : -2,
@@ -238,25 +258,25 @@ states = {
 
     "ERROR_1" : {
         'description' :  'Lexical Error : expected closing parenthesis (") here',
-        ANY_OR_NEWLINE : "skipLine",
+        ANY_OR_NEWLINE : "start",
         'pushback' : -1,
     },
 
     "ERROR_2" : {
         'description' :  'Lexical Error: invalid token (!)',
-        ANY_OR_NEWLINE : "skipLine",
+        ANY_OR_NEWLINE : "start",
         'pushback' : -1,
     }, 
 
     "ERROR_3" : {
         'description' :  'Lexical Error: incorrect number format',
-        ANY_OR_NEWLINE : "skipLine",
+        ANY_OR_NEWLINE : "start",
         'pushback' : -1,
     }, 
 
     "ERROR_4" : {
         'description' :  'Lexical Error: illegal character sequence',
-        ANY_OR_NEWLINE : "skipLine",
+        ANY_OR_NEWLINE : "start",
         'pushback' : -1,
     }, 
 
@@ -300,7 +320,7 @@ def main():
         # evaluating the currentState
         # tokens
         if ('pushback' in states[currentState]): # check if the pushback key is here.
-            if (states[currentState]['pushback'] == -2):
+            if (states[currentState]['pushback'] <= -2):
                 print(f"StringBuilt: {tempBuiltString[:len(tempBuiltString)-1]}") # prune the last
                 stringCollection.append((tempBuiltString[:len(tempBuiltString)-1],currentState))
             elif(states[currentState]['pushback'] == -1):
@@ -330,7 +350,7 @@ def main():
         print(currentState)
         # check if it's a pushback state of -2
         if 'pushback' in states[currentState]:
-            if states[currentState]['pushback'] == -2:
+            if states[currentState]['pushback'] <= -2:
                 stringCollection.append((tempBuiltString[:len(tempBuiltString)-1],currentState))
         
 
