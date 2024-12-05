@@ -18,6 +18,8 @@ def printResults(ans):
                     file.write("{:<12}{:<12}\n".format("Or",i[0]))
                 elif(i[0] == "NOT"):
                     file.write("{:<12}{:<12}\n".format("Not",i[0]))
+                elif(i[0] == "SQRT"):
+                    file.write("{:<12}{:<12}\n".format("Sqrt",i[0]))
                 else:
                     file.write("{:<12}{:<12}\n".format(i[1],i[0]))
             elif(i[1] == 'Error'):

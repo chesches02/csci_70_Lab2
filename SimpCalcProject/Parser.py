@@ -69,6 +69,7 @@ class Parser:
         if not self.error_encountered:
             self.output.append(f"Parse Error: {message} expected.")
             self.error_encountered = True
+            
     def program(self):
         while self.current_index < len(self.tokens) and not self.error_encountered:
             if self.statement():
