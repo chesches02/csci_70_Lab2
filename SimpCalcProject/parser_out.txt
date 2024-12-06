@@ -1,11 +1,10 @@
 Assignment Statement Recognized
 Assignment Statement Recognized
-Assignment Statement Recognized
-Assignment Statement Recognized
-Assignment Statement Recognized
+If Statement Begins
 If Statement Begins
 Print Statement Recognized
-Print Statement Recognized
 If Statement Ends
-Print Statement Recognized
-SimpCalcProject/parser_out.txt is a valid SimpCalc file
+If Statement Ends
+Assignment Statement Recognized
+If Statement Begins
+Parse Error: Colon      expected.
