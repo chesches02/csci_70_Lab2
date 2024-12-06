@@ -1,1 +1,11 @@
-Parse Error: Assign expected.
+Assignment Statement Recognized
+Assignment Statement Recognized
+Assignment Statement Recognized
+Assignment Statement Recognized
+Assignment Statement Recognized
+If Statement Begins
+Print Statement Recognized
+Print Statement Recognized
+If Statement Ends
+Print Statement Recognized
+SimpCalcProject/parser_out.txt is a valid SimpCalc file
