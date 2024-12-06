@@ -1,5 +1,6 @@
 import re
 import sys
+from Scanner import gettoken
 
 sys.setrecursionlimit(30)
 
@@ -14,14 +15,14 @@ grammar_rules = {
         },
     "Blk" : {
         "Identifier" : "Stm Blk",
-        "Print" : "Stm Blk",
-        "If" : "Stm Blk",
+        "PRINT" : "Stm Blk",
+        "IF" : "Stm Blk",
         "default" : "",  
     },
     "Stm" : {
         "Identifier" : "Identifier Assign Exp Semicolon",
-        "Print" : "Print LeftParen Arg Argfollow RightParen Semicolon",
-        "If" : "If Cnd Colon Blk Iffollow",
+        "PRINT" : "PRINT LeftParen Arg Argfollow RightParen Semicolon",
+        "IF" : "IF Cnd Colon Blk Iffollow",
     },
     "Argfollow" : {
         "Comma" : "Comma Arg Argfollow",
@@ -32,8 +33,8 @@ grammar_rules = {
         "default" : "Exp",
     },
     "Iffollow" : {
-        "Endif" : "Endif Semicolon",
-        "Else" : "Else Blk Endif Semicolon",
+        "ENDIF" : "ENDIF Semicolon",
+        "ELSE" : "ELSE Blk ENDIF Semicolon",
     },
     "Exp" : {
         "default" : "Trm Trmfollow",
@@ -65,7 +66,7 @@ grammar_rules = {
     "Val" : {
         "Identifier" : "Identifier",
         "Number" : "Number",
-        "Sqrt" : "Sqrt LeftParen Exp RightParen",
+        "SQRT" : "SQRT LeftParen Exp RightParen",
         "default" : "LeftParen Exp RightParen",
     },
     "Cnd" : {
@@ -93,7 +94,7 @@ def recursive_descent_parser(parsetree="Prg"):
 
     print("{:<50}{:<15}{}\n".format(parsetree,tokenList[tokenList_index],tokenList_index+1))
 
-    if parsetree == "If Cnd Colon Blk Iffollow":
+    if parsetree == "IF Cnd Colon Blk Iffollow":
         print("If Statement Begins")
         writeToFile.append("If Statement Begins")
 
@@ -142,7 +143,7 @@ def recursive_descent_parser(parsetree="Prg"):
         
         #if for some reason, it can't be decomposed and it doesn't match the token we're currently looking at, there's probably an error
         else:
-            print(f"Parse Error: {token_list[i]} expected. (line #{tokenList_index}) ")
+            print(f"Parse Error: {token_list[i]} expected.")
             hasError = True
             writeToFile.append(f"Parse Error: {token_list[i]}      expected.")
             i += 1
@@ -164,16 +165,16 @@ def recursive_descent_parser(parsetree="Prg"):
     elif parsetree == "Identifier Assign Exp Semicolon" and hasError:
         print("Assignment statement error")
 
-    if parsetree == "Print LeftParen Arg Argfollow RightParen Semicolon" and resolved and not hasError:
+    if parsetree == "PRINT LeftParen Arg Argfollow RightParen Semicolon" and resolved and not hasError:
         print("Print Statement Recognized")
         writeToFile.append("Print Statement Recognized")
-    elif parsetree == "Print LeftParen Arg Argfollow RightParen Semicolon" and not resolved:
+    elif parsetree == "PRINT LeftParen Arg Argfollow RightParen Semicolon" and not resolved:
         print("Print Statement Error")
 
-    if parsetree == "If Cnd Colon Blk Iffollow" and resolved and not hasError:
+    if parsetree == "IF Cnd Colon Blk Iffollow" and resolved and not hasError:
         print("If Statement Ends")
         writeToFile.append("If Statement Ends")
-    if parsetree == "Else Blk EndIf Semicolon" and not resolved:
+    if parsetree == "ELSE Blk EndIf Semicolon" and not resolved:
         print("Incomplete If Statement")
 
     #if not resolved:
@@ -183,15 +184,41 @@ def recursive_descent_parser(parsetree="Prg"):
     return final_token_list
 
 if __name__ == "__main__":
-    with open('SimpCalcProject/9Scanner.txt', 'r') as file:
+    with open('SimpCalc_input.txt', 'r') as file:
+
+        input_string = file.read().strip()
+    
+        tokens = gettoken(input_string)
 
         #turn it into a list of tokens
-        for line in file:
-            a = line.strip()
-            tokenList.append(a.split(' ')[0])
+        for token in tokens:
+            if(token[1] == "Identifier"):
+                if(token[0] == "PRINT"):
+                    tokenList.append("PRINT")
+                elif(token[0] == "IF"):
+                    tokenList.append("IF")
+                elif(token[0] == "ELSE"):
+                    tokenList.append("ELSE")
+                elif(token[0] == "ENDIF"):
+                    tokenList.append("ENDIF")
+                elif(token[0] == "AND"):
+                    tokenList.append("AND")
+                elif(token[0] == "OR"):
+                    tokenList.append("OR")
+                elif(token[0] == "NOT"):
+                    tokenList.append("NOT")
+                elif(token[0] == "SQRT"):
+                    tokenList.append("SQRT")
+                else:
+                    tokenList.append("Identifier")
+            elif token[1] != 15:
+                tokenList.append(token[1])
+
+        print("Tokenlist", tokenList)
+
         tokenList_index = 0
         isValid = len(recursive_descent_parser("Prg")) == 0
-        with open('SimpCalcProject/parser_out.txt', 'w') as outp:
+        with open('SimpCalc_output_parse.txt', 'w') as outp:
             for i in writeToFile:
                 outp.write(i + "\n")
             if isValid and not hasError:

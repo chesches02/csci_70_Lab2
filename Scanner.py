@@ -1,7 +1,7 @@
 import re #for determining the different symbol groups
 
 def printResults(ans):
-    with open('SimpCalcProject/scanner_out.txt', 'w') as file:
+    with open('SimpCalc_output_scan.txt', 'w') as file:
         for i in ans:
             if(i[1] == "Identifier"):
                 if(i[0] == "PRINT"):
@@ -289,12 +289,7 @@ states = {
 
 }
 
-def main():
-    input_file_path = 'SimpCalcProject/test_inp.txt'
-
-    with open(input_file_path, 'r') as file:
-        input_string = file.read().strip()
-    
+def gettoken(input_string):
     input_string += "?" #this serves as the end of file character
 
     i = 0
@@ -361,8 +356,14 @@ def main():
     #stringCollection.append((ENDOFFILE))
     
     print(stringCollection)
-    printResults(stringCollection)
+    return stringCollection
 
 
 if __name__ == '__main__':
-    main()
+    input_file_path = 'SimpCalc_input.txt'
+
+    with open(input_file_path, 'r') as file:
+        input_string = file.read().strip()
+    
+    tokens = gettoken(input_string)
+    printResults(tokens)
