@@ -24,4 +24,4 @@ How to run it
 2. Run Scanner.py
 3. Run Parser.py
 4. There should be two new files called SimpCalc_output_scan.txt and SimpCalc_output_parse.
-5. 
+5. Have fun!
